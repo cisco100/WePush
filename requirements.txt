@@ -1,0 +1,4 @@
+Package                         Version
+------------------------------- ------------
+Django                          4.1.2
+django-ckeditor                 6.5.1
