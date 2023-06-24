@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-import os
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -60,10 +60,28 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'WePush.urls'
 
+
+
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = Path(BASE_DIR) / "emails"
+EMAIL_HOST='localhost'
+EMAIL_PORT=25
+EMAIL_HOST_USER=""
+EMAIL_HOST_PASSWORD=""
+EMAIL_SUBJECT_PREFIX='[Django]'
+EMAIL_USE_LOCALTIME=False
+EMAIL_USE_TLS=False
+EMAIL_USE_SSL=False
+EMAIL_SSL_CERTFILE=None
+EMAIL_SSL_KEYFILE=None
+EMAIL_TIMEOUT=None
+
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,"templates")],
+        'DIRS': [Path(BASE_DIR)/"templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -150,11 +168,11 @@ CKEDITOR_CONFIGS = {
 
 
 STATIC_URL = 'static/'
-STATIC_ROOT=os.path.join(BASE_DIR,'static_files')
-STATICFILES_DIRS=[os.path.join(BASE_DIR,'static')] 
+STATIC_ROOT=Path(BASE_DIR)/'staticfiles'
+STATICFILES_DIRS=[Path(BASE_DIR)/'static'] 
 
-MEDIA_URL='/media/'
-MEDIA_ROOT=os.path.join(BASE_DIR,'media')
+MEDIA_URL='media/'
+MEDIA_ROOT=Path(BASE_DIR)/'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
