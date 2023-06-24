@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+<body>
+
+
+<form method="POST">{%csrf_token%}
+	<div>
+    <h1 >SignIn</h1>
+  </div>
+  <div>
+    {% if msg %}
+      <p><span >{{ msg | safe }}</span></p>
+    {% endif %}
+                
+        {{form.as_p}}
+
+      </div>
+      <div>
+        <input type="submit" name="login">
+      </div>
+      Don't have an account? <a href="{% url 'register' %}"><b>Create One!</b></a>
+      </div>
+      <div>
+      <a href="{% url 'password_reset' %}">Forgot your password?</a>
+  	  </div>
+      </form>
+
+
+
+</body>
+</html>
