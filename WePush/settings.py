@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     #PERSONAL
-    'auth.apps.AuthConfig',
+    'certify.apps.CertifyConfig',
     'blog.apps.BlogConfig',
     'export.apps.ExportConfig',
     'push.apps.PushConfig',
