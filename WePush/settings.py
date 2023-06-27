@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'export.apps.ExportConfig',
     'push.apps.PushConfig',
+    'colab.apps.ColabConfig',
 
     #3RD PARTIES
     'ckeditor',
