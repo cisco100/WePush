@@ -4,6 +4,12 @@ from django.shortcuts import render, redirect
 from certify.forms import SignInForm,SignUpForm
 from django.urls import reverse_lazy
 
+from rest_framework import mixins,generics
+from certify.models import Captcha
+from certify.serializers import CaptchaSerializer
+
+
+
 def login_view(request):
     form=SignInForm(request.POST or None)
     msg=None
@@ -32,6 +38,7 @@ def login_view(request):
 
 
 def register_view(request):
+    captcha_form=CaptchaForm()
     msg=None
     success=True
     if request.method=="POST":
@@ -49,8 +56,9 @@ def register_view(request):
             msg="Error registering user"
     else:
         form=SignUpForm()
+        #Querry the user entry with the captcha model
 
-    return render(request,"auth/register.html",{"form":form,"msg":msg,"success":success})
+    return render(request,"auth/register.html",{"form":form,"msg":msg,"success":success,"captcha_form":captcha_form})
 
 
 
