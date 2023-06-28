@@ -2,7 +2,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-
+from certify.models import Captcha
 class SignInForm(forms.Form):
     
     username=forms.CharField(
@@ -55,3 +55,7 @@ class SignUpForm(UserCreationForm):
         fields = ('username', 'email', 'password1', 'password2')
 
 
+class CaptchaForm(forms.ModelForm):
+    class Meta:
+        model=Captcha
+        fields=['value','image']
