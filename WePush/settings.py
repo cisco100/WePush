@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     #3RD PARTIES
     'ckeditor',
     'rest_framework',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -60,6 +61,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'WePush.urls'
+AUTH_USER_MODEL ='certi.Account'
 
 
 
