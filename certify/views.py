@@ -1,90 +1,98 @@
-from django.contrib.auth import authenticate, login,logout
-from django.contrib.auth import views as reset_view
+from django.shortcuts import render
+
 from django.shortcuts import render, redirect
-from certify.forms import SignInForm,SignUpForm
-from django.urls import reverse_lazy
+from django.contrib.auth import authenticate, login as auth_login, logout
+from django.contrib import messages
+from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import render
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView
+from django.views.generic.edit import CreateView, UpdateView
+from django.urls import reverse
+from django.contrib.auth import views
+
+from certify.models import Account,Captcha
+from certify.forms import RegistrationForm
+
 
 from rest_framework import mixins,generics
-from certify.models import Captcha
+
 from certify.serializers import CaptchaSerializer
 
 
 
-def login_view(request):
-    form=SignInForm(request.POST or None)
-    msg=None
-    if request.method=="POST":
-        if form.is_valid():
-            username=form.cleaned_data.get("username")
-            password=form.cleaned_data.get("password")
-            user=authenticate(username=username,password=password)
-            if user is not None:
-                login(request,user)
-                #return redirect(reverse_lazy("home"))
-            else:
-                msg="Invalid Credntials"
-                form=SignInForm()
-        else:
-            msg="Validation Error"
+class RegistrationView(CreateView):
+    template_name = 'registration/register.html'
+    form_class = RegistrationForm
 
-    return render(request,'auth/login.html',{"form":form,"msg":msg})
+    def get_context_data(self, *args, **kwargs):
+        context = super(RegistrationView, self).get_context_data(*args, **kwargs)
+        context['next'] = self.request.GET.get('next')
+        return context
 
-
-
-
-
-
-
-
-
-def register_view(request):
-    captcha_form=CaptchaForm()
-    msg=None
-    success=True
-    if request.method=="POST":
-        form=SignUpForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username=form.cleaned_data.get("username")
-            true_password=form.cleaned_data.get("password1")
-            #print(username,true_password)
-            user=authenticate(username=username,password=true_password)
-            #msg = 'User created - please <a href="/auth/login">login</a>.'
-            success = True
-            return redirect(reverse_lazy("login"))
-        else:
-            msg="Error registering user"
-    else:
-        form=SignUpForm()
+    def get_success_url(self):
+        next_url = self.request.POST.get('next')
+        success_url = reverse('login')
+        if next_url:
+            success_url += '?next={}'.format(next_url)
         #Querry the user entry with the captcha model
 
-    return render(request,"auth/register.html",{"form":form,"msg":msg,"success":success,"captcha_form":captcha_form})
+        return success_url
+
+
+class ProfileView(UpdateView):
+    model = Account
+    fields = ['email', 'name', 'phone', 'date_of_birth', 'picture', 'password','education_level','field_of_interest','update_me_on_my_field']
+    template_name = 'registration/profile.html'
+
+    def get_success_url(self):
+        return reverse('index')
+
+    def get_object(self):
+        return self.request.user
+
+
+# class CustomLoginView(views.LoginView):
+#     template_name = 'certi/login.html'
+   
+
+
+
+class CustomLogoutView(views.LogoutView):
+    template_name = 'registration/logout.html'
+   
+   
+
+
+
+class CaptchaView(generics.GenericAPIView,mixins.ListModelMixin,mixins.CreateModelMixin):
+    serializer_class=CaptchaSerializer
+    queryset=Captcha.objects.all()
+
+    def get(self,request):
+        return self.list(request)
+
+    def post(self,request):
+        return self.create(request)
+
+
+class CaptchaViewDetailed(generics.GenericAPIView,mixins.RetrieveModelMixin,mixins.UpdateModelMixin,mixins.DestroyModelMixin):
+    serializer_class=CaptchaSerializer
+    queryset=Captcha.objects.all()
+    lookup_field="id"
+    def get(self,request,id):
+        return self.retrieve(request,id)
+
+    def put(self,request,id):
+        return self.create(request,id)
+
+    def delete(self,request,id):
+        return self.destroy(request,id)
 
 
 
 
 
-def logout_view(request):
-    logout(request)
-    bye_msg='Thanks for using ---! See Yah!<a style="color:red; "href="{% url login%}"> Login Again</a>'
-    return render(request,"auth/logout.html",{'msg':bye_msg})
 
 
-
-
-
-
-class CustomPasswordResetView(reset_view.PasswordResetView):
-    template_name = 'auth/password_reset_form.html'
-    success_url = reverse_lazy('password_reset_done')
-
-class CustomPasswordResetDoneView(reset_view.PasswordResetDoneView):
-    template_name = 'auth/password_reset_done.html'
-
-class CustomPasswordResetConfirmView(reset_view.PasswordResetConfirmView):
-    template_name = 'auth/password_reset_confirm.html'
-    success_url = reverse_lazy('password_reset_complete')
-
-class CustomPasswordResetCompleteView(reset_view.PasswordResetCompleteView):
-    template_name = 'auth/password_reset_complete.html'
-    #success_url = reverse_lazy('login')

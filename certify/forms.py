@@ -1,59 +1,67 @@
-
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from certify.models import Captcha
-class SignInForm(forms.Form):
+from django.contrib.auth.models import Group
+from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from certify.models import Account,Captcha
+
+
+class RegistrationForm(forms.ModelForm):
+    password = forms.CharField(label='Password', widget=forms.PasswordInput)
+    date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    # edu_other = forms.CharField(required=False)
+    # field_other=forms.CharField(required=False)
+    class Meta:
+        model = Account
+        fields = ('email', 'name', 'phone', 'date_of_birth', 'picture', 'password','education_level','field_of_interest','update_me_on_my_field')
+
+    def save(self, commit=True):
+        # Save the provided password in hashed format
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
+
     
-    username=forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-            "placeholder":"username",
-            "class":"form-control",
-            }))
-
-
-    password=forms.CharField(
-        widget=forms.PasswordInput(
-            attrs={
-            "placeholder":"password",
-            "class":"form-control",
-            }))
-
-class SignUpForm(UserCreationForm):
     
-    username=forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-            "placeholder":"username",
-            "class":"form-control",
-                    }))
 
-    email=forms.EmailField(
-        widget=forms.EmailInput(
-            attrs={
-            "placeholder":"email",
-            "class":"form-control"
-            }))
-    
-    password1=forms.CharField(
-        widget=forms.PasswordInput(
-            attrs={
-            "placeholder":"password",
-            "class":"form-control",
-            }))
 
-    password2=forms.CharField(
-        widget=forms.PasswordInput(
-            attrs={
-            "placeholder":"Re-enter password",
-            "class":"form-control",
-            }))
+class UserCreationForm(forms.ModelForm):
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
 
     class Meta:
-        model=User
-        fields = ('username', 'email', 'password1', 'password2')
+        model = Account
+        fields = ('email', 'name', 'phone', 'date_of_birth', 'picture','education_level','field_of_interest','update_me_on_my_field', 'is_staff', 'is_superuser')
 
+    def clean_password2(self):
+        # Check that the two password entries match
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Passwords don't match")
+        return password2
+
+    def save(self, commit=True):
+        # Save the provided password in hashed format
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password1"])
+        if commit:
+            user.save()
+        return user
+
+
+class UserChangeForm(forms.ModelForm):
+    password = ReadOnlyPasswordHashField()
+
+    class Meta:
+        model = Account
+        fields = ('email', 'name', 'phone', 'date_of_birth', 'picture', 'password','education_level','field_of_interest','update_me_on_my_field', 'is_active', 'is_superuser')
+
+    # def clean_password(self):
+    #     # Regardless of what the user provides, return the initial value.
+    #     # This is done here, rather than on the field, because the
+    #     # field does not have access to the initial value
+    #     return self.initial["password"]
 
 class CaptchaForm(forms.ModelForm):
     class Meta:
