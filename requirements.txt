@@ -3,4 +3,6 @@ Package                         Version
 Django                          4.1.2
 django-ckeditor                 6.5.1
 djangorestframework             3.14.0 
-django-crispy-forms             1.14.0  
+django-crispy-forms             1.14.0
+Pillow                          9.4.0
+feedparser                      6.0.10     
