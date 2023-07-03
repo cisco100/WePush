@@ -11,7 +11,7 @@ class RegistrationForm(forms.ModelForm):
     # field_other=forms.CharField(required=False)
     class Meta:
         model = Account
-        fields = ('email', 'name', 'phone', 'date_of_birth', 'picture', 'password','education_level','field_of_interest','update_me_on_my_field')
+        fields = ('email', 'name', 'phone', 'date_of_birth', 'gender','picture', 'password','education_level','field_of_interest','update_me_on_my_field')
 
     def save(self, commit=True):
         # Save the provided password in hashed format
@@ -31,7 +31,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = Account
-        fields = ('email', 'name', 'phone', 'date_of_birth', 'picture','education_level','field_of_interest','update_me_on_my_field', 'is_staff', 'is_superuser')
+        fields = ('email', 'name', 'phone', 'date_of_birth','gender', 'picture','education_level','field_of_interest','update_me_on_my_field', 'is_staff', 'is_superuser')
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -55,7 +55,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = Account
-        fields = ('email', 'name', 'phone', 'date_of_birth', 'picture', 'password','education_level','field_of_interest','update_me_on_my_field', 'is_active', 'is_superuser')
+        fields = ('email', 'name', 'phone', 'date_of_birth','gender', 'picture', 'password','education_level','field_of_interest','update_me_on_my_field', 'is_active', 'is_superuser')
 
     # def clean_password(self):
     #     # Regardless of what the user provides, return the initial value.

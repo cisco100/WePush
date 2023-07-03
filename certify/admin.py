@@ -14,7 +14,7 @@ class AccountAdmin(BaseUserAdmin):
 
     fieldsets = (
         (None, {'fields': ('email', 'is_staff', 'is_superuser', 'password')}),
-        ('Personal Info', {'fields': ('name', 'phone', 'date_of_birth', 'picture')}),
+        ('Personal Info', {'fields': ('name', 'phone', 'date_of_birth','gender', 'picture')}),
         ('Educational Info', {'fields': ('education_level', 'field_of_interest', 'update_me_on_my_field')}),
         #('Educational Info',{'fields':('education_level','field_of_interest','update_me_on_my_field')}),
         ('Groups', {'fields': ('groups',)}),
@@ -22,7 +22,7 @@ class AccountAdmin(BaseUserAdmin):
     )
     add_fieldsets = (
         (None, {'fields': ('email', 'is_staff', 'is_superuser', 'password1', 'password2')}),
-        ('Personal info', {'fields': ('name', 'phone', 'date_of_birth', 'picture')}),
+        ('Personal info', {'fields': ('name', 'phone', 'date_of_birth','gender', 'picture')}),
         ('Educational info', {'fields': ('education_level', 'field_of_interest', 'update_me_on_my_field')}),
 
        # ('Educational Info',{'fields':('education_level','field_of_interest','update_me_on_my_field')})
