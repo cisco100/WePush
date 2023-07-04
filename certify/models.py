@@ -45,6 +45,14 @@ class AccountManager(BaseUserManager):
 
 
 class Account(AbstractBaseUser, PermissionsMixin):
+    
+
+    CHOICES_GENDER=(
+        ('MALE','MALE'),
+        ('FEMALE','FEMALE'),
+        ('OTHERS','OTHERS')
+        )
+
     CHOICES_LEVEL = (
         ('BASIC', 'BASIC'),
         ('SECONDARY', 'SECONDARY'),
@@ -71,6 +79,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=150)
     phone = models.CharField(max_length=50)
     date_of_birth = models.DateField(blank=True, null=True)
+    gender=models.CharField(max_length=20, choices=CHOICES_GENDER)
     picture = models.ImageField(blank=True, null=True,upload_to='uploads/picture')
     #edu_other = models.CharField(max_length=100,blank=True, null=True)
     education_level= models.CharField(max_length=20, choices=CHOICES_LEVEL,null=True, blank=True)
