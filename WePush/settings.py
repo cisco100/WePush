@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'rest_framework',
     'crispy_forms',
+    'jsignature',
 ]
 
 MIDDLEWARE = [
@@ -162,6 +163,12 @@ CKEDITOR_CONFIGS = {
             ]),
         },
 }
+
+
+
+# settings-JSIGN.py
+JSIGNATURE_WIDTH = 500
+JSIGNATURE_HEIGHT = 200
 #//////////////////////////////////////////////////////////
 
 

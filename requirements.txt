@@ -5,4 +5,5 @@ django-ckeditor                 6.5.1
 djangorestframework             3.14.0 
 django-crispy-forms             1.14.0
 Pillow                          9.4.0
-feedparser                      6.0.10     
+feedparser                      6.0.10    
+django_jsignature               0.11 
